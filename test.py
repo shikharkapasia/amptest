@@ -1,18 +1,27 @@
 import argparse
 from cgitb import lookup
+from distutils import config
 import enum
 import requests
 import urllib3
 import certifi
+import configparser
 
 http = urllib3.PoolManager(
     cert_reqs='CERT_REQUIRED',
     ca_certs=certifi.where()
 )
 
+config = configparser.ConfigParser()
+config.read('config.ini')
+
+host = config['googleapi']['host']
+user = config['googleapi']['user']
+apikey = config['googleapi']['apikey']
+
 headers = {
     'Content-Type': 'application/json',
-    'X-Goog-Api-Key': 'AIzaSyC3V-YHo-ESvupSE-Ue1hdG_1gTX_rfFzQ',
+    'X-Goog-Api-Key': apikey,
 }
 
 data = '{urls: "https://www.rankwatch.com/blog/competitor-monitoring/"."https://www.rankwatch.com/blog/"}'
