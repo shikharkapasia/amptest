@@ -1,18 +1,19 @@
-from flask import Flask, redirect, url_for, request
+import json
+from flaskapi import Flask, request, jsonify
+import argparse
+import test
+
+
 app = Flask(__name__)
 
-@app.route('/success/<name>')
-def success(name):
-   return 'welcome %s' % name
+def ampurl():
+    headers = {
+    'Content-Type': 'application/json',
+    'X-Goog-Api-Key': test.args.apikey ,
+}
 
-@app.route('/login',methods = ['POST', 'GET'])
-def login():
-   if request.method == 'POST':
-      user = request.form['nm']
-      return redirect(url_for('success',name = user))
-   else:
-      user = request.args.get('nm')
-      return redirect(url_for('success',name = user))
 
-if __name__ == '__main__':
-   app.run(debug = True)
+@app.route('https://acceleratedmobilepageurl.googleapis.com/v1/ampUrls:batchGet', methods=['GET', 'POST'])
+def create_record():
+    record = json.loads(request.data)
+    return jsonify(record)
